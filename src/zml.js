@@ -1,6 +1,10 @@
 'use strict';
 
 var gServers = [
+	{
+        name: 'Test', // test
+        url: 'ws:/192.168.0.107:81'
+    },
     {
         name: '{{ zml.inst.kickdrum }}', // JoParrot
         url: 'ws:/192.168.2.18:81'
@@ -62,7 +66,7 @@ function sendCommand(str, forceToAll) {
         return;
     }
     gLastCommandTime = now;
-    
+
     gServers.forEach(function(server) {
         if (server.websocket && server.websocket.readyState == WebSocket.OPEN) {
             if (forceToAll || (server.checkbox && server.checkbox.checked)) {
@@ -77,7 +81,7 @@ function sendCommand(str, forceToAll) {
 function updateStatus() {
     var nb_servers = gServers.length;
     var nb_servers_ok = 0;
-    
+
     gServers.forEach(function(server) {
         if (server.websocket && server.websocket.readyState == WebSocket.OPEN) {
             nb_servers_ok++;
@@ -96,11 +100,11 @@ function updateStatus() {
                 server.status_box.innerHTML = 'KO';
         }
     });
-    
+
     var main_status_box = $('#main-status-box');
     if (!main_status_box)
         return;
-    
+
     if (nb_servers_ok === 0) {
         main_status_box.innerHTML =
             '<big class="status-txt status-alert">! KO !</big>';
@@ -115,18 +119,18 @@ function updateStatus() {
 
 function rgb2hsl(r, g, b) {
     var h = 0, s = 0, l = 0;
-    
+
     var r = r / 255;
     var g = g / 255;
     var b = b / 255;
-    
+
     var max = Math.max(r, g, b);
     var min = Math.min(r, g, b);
     var delta = max - min;
-    
+
     var sum = max + min;
     l = Math.round(sum * 50);
-    
+
     if (max == min) {
         s = 0
     } else {
@@ -135,7 +139,7 @@ function rgb2hsl(r, g, b) {
         else
             s = Math.round(100 * delta / (2 - sum));
     }
-    
+
     if (max == min)  {
         h = 0;
     } else if (max == r) {
@@ -145,52 +149,52 @@ function rgb2hsl(r, g, b) {
     } else if (max == b) {
         h = Math.round(240 + 60 * (r - g) / delta);
     }
-    
+
     if (h < 0) h += 360;
-    
+
     return {h: h, s: s, l: l};
 }
 
 function h2rgb(aV1, aV2, aH) {
     if (aH < 0) aH += 6;
     if (aH > 6) aH -= 6;
-    
+
     if (aH < 1)
         return aV1 + (aV2 - aV1) * aH;
     if (aH < 3)
         return aV2;
     if (aH < 4)
         return aV1 + (aV2 - aV1) * (4 - aH);
-    
+
     return aV1;
 }
 
 function hsl2rgb(h, s, l) {
     var r = 0, g = 0, b = 0;
-    
+
     if (s == 0) {
         // gray
         r = g = b = Math.round(l * 2.55);
-        
+
         return {r: r, g: g, b: b};
     }
-    
+
     var hr = h / 60,
         sr = s / 100,
         lr = l / 100;
-    
+
     var v2;
     if (l < 50)
         v2 = lr * (1 + sr);
     else
         v2 = lr + sr - lr * sr;
-    
+
     var v1 = 2 * lr - v2;
-    
+
     r = Math.round(255 * h2rgb(v1, v2, (hr + 2)));
     g = Math.round(255 * h2rgb(v1, v2, hr));
     b = Math.round(255 * h2rgb(v1, v2, (hr - 2)));
-    
+
     return {r: r, g: g, b: b};
 }
 
@@ -198,7 +202,7 @@ function hex(n) {
     var x = n.toString(16);
     if (x.length == 1)
         x = '0' + x;
-    
+
     return x;
 }
 
@@ -206,14 +210,14 @@ function rgb2hexa(r, g, b, a3digit) {
     var hex_r = hex(r);
     var hex_g = hex(g);
     var hex_b = hex(b);
-    
+
     if (a3digit && hex_r[0] == hex_r[1] && hex_g[0] == hex_g[1]
         && hex_b[0] == hex_b[1]) {
         hex_r = hex_r[0];
         hex_g = hex_g[0];
         hex_b = hex_b[0];
     }
-    
+
     return "#" + hex_r + hex_g + hex_b;
 }
 
@@ -239,7 +243,7 @@ function _setHSLdata(h, s, l, ignore) {
     }
     if (ignore === undefined || ignore === null)
         ignore = {};
-    
+
     if (! ('h' in ignore)) {
         gHSL_H_gradient.style.backgroundImage =
             'linear-gradient(to right, ' +
@@ -252,7 +256,7 @@ function _setHSLdata(h, s, l, ignore) {
             'hsl(360, ' + s + '%, ' + l + '%) ' +
             ')';
     }
-    
+
     if (! ('s' in ignore)) {
         gHSL_S_gradient.style.backgroundImage =
             'linear-gradient(to right, ' +
@@ -260,7 +264,7 @@ function _setHSLdata(h, s, l, ignore) {
             'hsl(' + h + ', 100%, ' + l + '%) ' +
             ')';
     }
-    
+
     if (! ('l' in ignore)) {
         gHSL_L_gradient.style.backgroundImage =
             'linear-gradient(to right, ' +
@@ -269,7 +273,7 @@ function _setHSLdata(h, s, l, ignore) {
             'hsl(' + h + ', ' + s + '%, 100%) ' +
             ')';
     }
-    
+
     gColorsample.style.backgroundColor = 'hsl(' + h + ',' + s + '%,' + l +  '%)';
     var rgb = hsl2rgb(h, s, l);
     var hexa = rgb2hexa(rgb.r, rgb.g, rgb.b);
@@ -310,7 +314,7 @@ function init() {
             icon.innerHTML = '▼';
         }
     });
-    
+
     var substatus_block = $('#substatus-block');
     substatus_block.style.display = 'none';
     var substatus_box = $('#substatus-box');
@@ -329,7 +333,7 @@ function init() {
             server.checkbox.className = 'status-cbox';
             server.status_block.appendChild(server.checkbox);
             substatus_box.appendChild(server.status_block);
-            
+
             server.status_block.addEventListener('click', function(e) {
                 if (e.target.nodeName && e.target.nodeName == 'INPUT')
                     return;
@@ -350,19 +354,19 @@ function init() {
             }
         });
     });
-    
+
     $('#select-all-masks-bt').addEventListener('click', function() {
         gServers.forEach(function(server) {
             server.checkbox.checked = true;
         });
     });
-    
+
     $('#unselect-all-masks-bt').addEventListener('click', function() {
         gServers.forEach(function(server) {
             server.checkbox.checked = false;
         });
     });
-    
+
     var stati_bt = $('#stati-bt');
     if (substatus_box.children.length < 2)
         stati_bt.style.display = 'none';
@@ -378,9 +382,9 @@ function init() {
             icon.innerHTML = '▼';
         }
     });
-    
+
     updateStatus();
-    
+
     var mutable_bt = $('#mutable-cmd-bt');
     var mutable_input = $('#mutable-cmd-input');
     if (mutable_bt && mutable_input) {
@@ -390,7 +394,7 @@ function init() {
                 sendCommand(cmd);
         });
     }
-    
+
     $$('.cmd-bt').forEach(function(elt) {
         elt.addEventListener('click', function(evt) {
             var cmd = this.getAttribute('data-cmd');
@@ -403,7 +407,7 @@ function init() {
             }
         });
     });
-    
+
     $$('.cmd-slider').forEach(function(elt) {
         // perhaps the 'input' event occurs too often, some tests should be tried...
         elt.addEventListener('input', function(evt) {
@@ -413,13 +417,13 @@ function init() {
                 sendCommand(cmd + this.value);
         });
     });
-    
+
     $$('.color-bt').forEach(function(elt) {
         elt.addEventListener('click', function(evt) {
             var color = this.getAttribute("data-color");
             if (!color)
                 return;
-            
+
             var re = /^\s*hsl\(\s*([\d]{1,3})\s*,\s*([\d]{1,3})%\s*,\s*([\d]{1,3})%\s*\)\s*/i;
             var res = re.exec(color);
             if (res) {
@@ -427,7 +431,7 @@ function init() {
             }
         });
     });
-    
+
     gHSL_H_slider = $('#cs-hsl-h');
     gHSL_S_slider = $('#cs-hsl-s');
     gHSL_L_slider = $('#cs-hsl-l');
@@ -436,14 +440,14 @@ function init() {
     gHSL_L_gradient = $('#gb-hsl-l');
     gColorsample = $('#colorsample');
     gColortext = $('#colortext');
-    
+
     //gHSL_H_slider.addEventListener('change', setHSL_hue);
     //gHSL_S_slider.addEventListener('change', setHSL_saturation);
     //gHSL_L_slider.addEventListener('change', setHSL_lightness);
     gHSL_H_slider.addEventListener('input', setHSL_hue);
     gHSL_S_slider.addEventListener('input', setHSL_saturation);
     gHSL_L_slider.addEventListener('input', setHSL_lightness);
-    
+
     setInterval(function() {updateStatus}, 1000);
 }
 

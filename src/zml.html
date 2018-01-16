@@ -19,11 +19,11 @@
 <body>
 
 <div id="page" class="container">
-    
+
     <header>
         <h1 class="main-title">{{ zml.maintitle }}</h1>
     </header>
-    
+
     <section id="status-box">
         <div id="status-box-inner">
             <button id="stati-bt" style="float: right;">
@@ -40,7 +40,7 @@
             </div>
         </div>
     </section>
-    
+
     <section class="responses-box">
         <h5>
             {{ zml.serversresponses }}
@@ -52,10 +52,10 @@
         <textarea id="responses-textarea" name="responses-textarea"
                   maxlength="20" rows="5" cols="40" readonly></textarea>
     </section>
-    
+
     <section class="commands-box">
         <h3>{{ zml.commands }}</h3>
-        
+
         <div class="cmd-boxes">
             <div class="cmd-box">
                 <button class="cmd-bt" data-cmd="continuous">
@@ -154,9 +154,13 @@
                     <span class="sr-only">{{ zml.color.purple }}</span>
                     <span class="color-bt-cbox bgled-purple">&nbsp;</span>
                 </button>
+                <button class="color-bt" data-color="hsl(0, 100%, 2%)">
+                    <span class="sr-only">{{ zml.color.lred }}</span>
+                    <span class="color-bt-cbox bgled-lred">&nbsp;</span>
+                </button>
             </div>
         </div>
-        
+
         <div id="hsl-selector-box" class="clearfix">
             <div id="colorsample-box">
                 <div id="colorsample" style="background-color: rgb(169, 0, 255);"></div>
@@ -198,7 +202,7 @@
                 </div>
             </div>
         </div>
-        
+
         <br>
         <div class="cmd-boxes">
             <div class="cmd-box">
@@ -236,7 +240,7 @@
 
 
 
-        
+
         <div id="mutable-cmd-box">
             <label for="mutable-cmd-input">{{ zml.freecommand }}</label>
             <br>
@@ -246,10 +250,10 @@
             </button>
         </div>
     </section>
-    
+
     <footer>
     </footer>
-    
+
     <!--<script src="./zml.js"></script>-->
     <script>
     // @@_JS_@@
