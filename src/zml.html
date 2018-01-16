@@ -104,8 +104,28 @@
                 </label>
             </div>
             <div class="cmd-box">
+				<div class="cmd-slidebox">
+                <label>
+                    <small>{{ zml.speed.label }}</small>
+                    <input class="cmd-slider" type="range" data-cmd="dchsespeed:"
+                           min="1" max="50" step="1" value="1">
+                </label>
+				</div>
+				<div class="cmd-slidebox">
+                <label>
+                    <small>{{ zml.ctl.brightness}}</small>
+                    <input class="cmd-slider" type="range" data-cmd="brightness:"
+                           min="1" max="255" step="1" value="128">
+                </label>
+				</div>
+
+			</div>
+            <div class="cmd-box">
                 <button class="cmd-bt" data-cmd="random">
                     {{ zml.effect.random }}
+                </button>
+				<button class="cmd-bt" data-cmd="random_move">
+                    {{ zml.effect.random_move }}
                 </button>
             </div>
             <div class="cmd-box">
